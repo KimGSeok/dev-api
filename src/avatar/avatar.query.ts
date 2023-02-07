@@ -15,3 +15,28 @@ export const getScriptExampleQuery = `
   WHERE
     deleted_at IS NULL
 `;
+
+/**
+ * Description: 음성 및 영상 촬영 후, 생성된 파일로 아바타 자원파일 생성
+ * Date: 2023.02.08
+ * Author: Kim Gyeong Seok
+ */
+export const createAvatarQuery = `
+  INSERT
+  INTO
+    avatar_resource
+  VALUES
+    (
+      uuid = ?,
+      avatar_id = ?,
+      script_type = ?,
+      avatar_type = ?,
+      script = ?,
+      path = ?,
+      download_url = ?,
+      file_name = ?,
+      created_at = NOW(),
+      updated_at = NOW(),
+      deleted_at = NOW()
+    )
+`

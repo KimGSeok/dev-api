@@ -7,6 +7,8 @@ import { ConnectionService  } from './connection/connection.service';
 import { AvatarController } from './avatar/avatar.controller';
 import { AvatarService } from './avatar/avatar.service';
 import { ProjectController } from './project/project.controller';
+import { FileController } from './file/file.controller';
+import { FileService } from './file/file.service';
 
 @Module({
   imports: [
@@ -20,12 +22,14 @@ import { ProjectController } from './project/project.controller';
   controllers: [
     AppController,
     AvatarController,
-    ProjectController
+    ProjectController,
+    FileController,
   ],
   providers: [
     AppService,
     ConnectionService,
-    AvatarService
+    AvatarService,
+    FileService
   ], // Model
 })
 export class AppModule { }
