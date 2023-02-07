@@ -12,7 +12,6 @@ export class AppController {
 
   @Get("/:id")
   getOne(@Param("id") props: string) {
-    console.log('야호')
     try {
 
       return `this will return ${props}`;
