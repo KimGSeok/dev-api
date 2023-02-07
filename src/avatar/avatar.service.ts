@@ -9,6 +9,8 @@ export class AvatarService {
   async getVoiceScriptExampleList() {
     try{
 
+      console.log('-------- 🚀 CONNECT GET VOICE SCRIPT EXAMPLE LISTS 🚀 --------');
+
       const [response, field] = await this.connection.connectionPool.query(getScriptExampleQuery, []);
       return response;
     }catch(error){

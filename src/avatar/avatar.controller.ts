@@ -4,7 +4,7 @@ import { AvatarService } from './avatar.service';
 @Controller('avatar')
 export class AvatarController {
 
-  constructor(private service: AvatarService) { }
+  constructor(private service: AvatarService) {}
 
   @Get('/getScripts')
   async getVoiceScriptExample(){
