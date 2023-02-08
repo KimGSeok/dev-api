@@ -3,10 +3,13 @@ import mysql from "mysql2/promise";
 
 @Injectable()
 export class ConnectionService implements OnModuleInit {
-  public connectionPool:mysql.Pool ;
-  constructor(){}
+  public connectionPool: mysql.Pool;
+  constructor() { }
 
   async onModuleInit() {
+
+    console.log(process.env);
+
     this.connectionPool = mysql.createPool({
       host: process.env.DB_HOST as string,
       user: process.env.DB_USER as string,
