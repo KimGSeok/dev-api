@@ -17,11 +17,11 @@ export const multerOptions = {
       const year = today.getFullYear();
       const month = ('0' + (today.getMonth() + 1)).slice(-2);
       const day = ('0' + today.getDate()).slice(-2);
-      const dateString = year + '-' + month  + '-' + day;
-      const uploadPath: string = `public/${dateString}/${uuid}}`;
-      
-      if(!existsSync(uploadPath)){
-        mkdirSync(uploadPath,{ recursive: true });
+      const dateString = year + '-' + month + '-' + day;
+      const uploadPath: string = `src/public/${dateString}/${uuid}}`;
+
+      if (!existsSync(uploadPath)) {
+        mkdirSync(uploadPath, { recursive: true });
       }
       cb(null, uploadPath);
     },
