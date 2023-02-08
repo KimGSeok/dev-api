@@ -10,8 +10,7 @@ export class ConnectionService implements OnModuleInit {
 
     console.log('.env 설정파일');
     console.log(process.env);
-    console.log(process.env.env);
-    console.log(JSON.stringify(process.env.env));
+    console.log(process.env.NODE_ENV);
 
     const env = process.env.NODE_ENV ? process.env : process.env.env;
 
