@@ -8,7 +8,10 @@ export class ConnectionService implements OnModuleInit {
 
   async onModuleInit() {
 
+    console.log('.env 설정파일');
     console.log(process.env);
+    console.log(process.env.DB_HOST);
+    console.log(process.env.env);
 
     this.connectionPool = mysql.createPool({
       host: process.env.DB_HOST as string,
