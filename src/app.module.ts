@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+import { HttpModule } from '@nestjs/axios';
 import { WinstonModule } from 'nest-winston';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -9,9 +10,11 @@ import { AvatarService } from './avatar/avatar.service';
 import { ProjectController } from './project/project.controller';
 import { FileController } from './file/file.controller';
 import { FileService } from './file/file.service';
+import { ProjectService } from './project/project.service';
 
 @Module({
   imports: [
+    HttpModule,
     ConfigModule.forRoot({
       isGlobal: true,
     }),
@@ -29,7 +32,8 @@ import { FileService } from './file/file.service';
     AppService,
     ConnectionService,
     AvatarService,
-    FileService
+    ProjectService,
+    FileService,
   ], // Model
 })
 export class AppModule { }

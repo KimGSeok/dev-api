@@ -8,7 +8,7 @@ let url: string;
 if(process.env.NODE_ENV === 'development')
   url = 'http://localhost:30001/';
 else
-  url = 'https://https://api.cidev.kr/';
+  url = 'https://api.cidev.kr/';
 
 @Injectable()
 export class AvatarService {
@@ -18,12 +18,12 @@ export class AvatarService {
   async getVoiceScriptExampleList() {
     try{
 
-      console.log('-------- 🚀 CONNECT GET VOICE SCRIPT EXAMPLE LISTS 🚀 --------');
-
+      // Query
       const [response, field] = await this.connection.connectionPool.query(getScriptExampleQuery, []);
       return response;
     }catch(error){
       console.log('아바타 스크립트 조회 로직 에러발생');
+      console.log(error);
       return error;
     }
   }
@@ -49,6 +49,7 @@ export class AvatarService {
       return;
     }catch(error){
       console.log('아바타 스크립트 생성 로직 에러발생');
+      console.log(error);
       return error;
     }
   }

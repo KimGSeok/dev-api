@@ -11,12 +11,14 @@ export class AvatarController {
   @Get('/getScripts')
   async getVoiceScriptExample(){
     try{
+
       const result = await this.service.getVoiceScriptExampleList();
       return result;
-      
     }catch(error){
+
       console.log('아바타 스크립트 조회중 에러발생');
       console.error(error);
+      return error;
     }
   }
 
@@ -31,10 +33,11 @@ export class AvatarController {
       const avatarType = res.avatarType;
 
       await this.service.uploadFiles(data, avatarId, avatarType, files);
-
     }catch(error){
+      
       console.log('아바타 스크립트 생성중 에러발생');
       console.log(error);
+      return error;
     }
   }
 }
