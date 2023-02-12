@@ -4,7 +4,7 @@ import { HttpModule } from '@nestjs/axios';
 import { WinstonModule } from 'nest-winston';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { ConnectionService  } from './connection/connection.service';
+import { ConnectionService } from './connection/connection.service';
 import { AvatarController } from './avatar/avatar.controller';
 import { AvatarService } from './avatar/avatar.service';
 import { ProjectController } from './project/project.controller';
@@ -16,7 +16,7 @@ import { ProjectService } from './project/project.service';
   imports: [
     HttpModule,
     ConfigModule.forRoot({
-      isGlobal: true,
+      envFilePath: ['.env'],
     }),
     WinstonModule.forRoot({
       transports: []

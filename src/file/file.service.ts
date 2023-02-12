@@ -19,7 +19,7 @@ export class FileService {
     res.set({ 'Content-Disposition': `attachment; filename=${file}` });
 
     const stream = createReadStream(
-      path.join(process.cwd(), `public/${date}/${avatar}/${file}`),
+      path.join(process.cwd(), `src/public/${date}/${avatar}/${file}`),
     );
     stream.pipe(res);
     return;
