@@ -34,7 +34,7 @@ export class ProjectService{
           'script': el.text,
           'speed': el.speed,
           'pause_second': el.pauseSecond,
-          'audio_twin_version': voice.voiceModel ? voice.voiceModel : '01831218-c70d-78ee-9cba-03532fabd6f6'
+          'audio_twin_version': voice.voiceModel ? voice.voiceModel : '01831c53-3a8b-7a50-bd97-v16ch5f8d45s'
         })
       });
 
