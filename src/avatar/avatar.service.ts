@@ -41,12 +41,12 @@ export class AvatarService {
       console.log(files[0].destination.split('/')[1]);
 
       // TODO
-      data.forEach(async (item: any) => {
+      // data.forEach(async (item: any) => {
 
-        await this.connection.connectionPool.query(createAvatarQuery, []);
-      })
+        // await this.connection.connectionPool.query(createAvatarQuery, []);
+      // })
 
-      return;
+      return true;
     }catch(error){
       console.log('아바타 스크립트 생성 로직 에러발생');
       console.log(error);
