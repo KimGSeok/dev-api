@@ -5,8 +5,13 @@ import { Logger } from './lib/logger';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule,{
     logger: new Logger(),
+    cors: true
   });
-  app.enableCors();
+  app.enableCors({
+    origin: true,
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+    credentials: true
+  });
   await app.listen(30001);
 }
 bootstrap();
