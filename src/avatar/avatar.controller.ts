@@ -33,6 +33,7 @@ export class AvatarController {
       const avatarType = res.avatarType;
 
       const response = await this.service.uploadFiles(data, avatarId, avatarType, files);
+      console.log(response);
       return response;
     }catch(error){
       

@@ -32,19 +32,21 @@ export class AvatarService {
     try{
 
       
-      console.log(data);
-      console.log(avatarId);
-      console.log(avatarType);
-      console.log(files);
+      // console.log(data);
+      // console.log(avatarId);
+      // console.log(avatarType);
+      // console.log(files);
 
-      console.log(files[0].destination.split('/'));
-      console.log(files[0].destination.split('/')[1]);
+      // console.log(files[0].destination.split('/'));
+      // console.log(files[0].destination.split('/')[1]);
 
       // TODO
       // data.forEach(async (item: any) => {
 
         // await this.connection.connectionPool.query(createAvatarQuery, []);
       // })
+
+      console.log(avatarId);
 
       return avatarId;
     }catch(error){
