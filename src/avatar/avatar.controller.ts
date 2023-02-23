@@ -32,7 +32,8 @@ export class AvatarController {
       const avatarId = res.avatarId;
       const avatarType = res.avatarType;
 
-      await this.service.uploadFiles(data, avatarId, avatarType, files);
+      const response = await this.service.uploadFiles(data, avatarId, avatarType, files);
+      return response;
     }catch(error){
       
       console.log('아바타 스크립트 생성중 에러발생');
