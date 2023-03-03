@@ -5,5 +5,7 @@ export class UserService {
 
   async test() {
     console.log('test');
+
+    return 'test';
   }
 }

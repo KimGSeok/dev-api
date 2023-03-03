@@ -54,7 +54,7 @@ export class AvatarService {
       return avatarId;
     } catch (error) {
       console.log('아바타 스크립트 생성 로직 에러발생');
-      console.log(error);
+      console.error(error);
       return error;
     }
   }
