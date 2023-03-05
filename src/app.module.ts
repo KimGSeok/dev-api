@@ -17,6 +17,7 @@ import { UserService } from './user/user.service';
 import { AuthService } from './auth/auth.service';
 import { AuthModule } from './auth/auth.module';
 import { Request, Response, NextFunction } from 'express';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class LoggerMiddleWare implements NestMiddleware {

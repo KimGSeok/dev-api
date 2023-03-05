@@ -40,3 +40,6 @@ lerna-debug.log*
 
 # Source File
 /src/public/
+
+# Constants File
+/src/auth/constants.ts
