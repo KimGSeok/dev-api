@@ -1,12 +1,12 @@
 import { Body, Controller, Get, Post, UseInterceptors, Bind, UploadedFiles } from '@nestjs/common';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { multerOptions } from 'src/lib/multer';
-import { AvatarService } from './avatar.service';
+import { VirtualHumanService } from './virtual-human.service';
 
 @Controller('avatar')
-export class AvatarController {
+export class VirtualHumanController {
 
-  constructor(private service: AvatarService) { }
+  constructor(private service: VirtualHumanService) { }
 
   @Get('/getScripts')
   async getVoiceScriptExample() {

@@ -3,17 +3,24 @@
  * Date: 2023.02.05
  * Author: Kim Gyeong Seok
  */
-export const getScriptExampleQuery = `
+export const getRecordScriptQuery = `
   SELECT
-    id,
-    type,
-    script,
-    DATE_FORMAT(created_at, '%Y-%m-%d %H:%i:%s') AS created_at,
-    DATE_FORMAT(updated_at, '%Y-%m-%d %H:%i:%s') AS updated_at
+    RS.id,
+    RS.uuid,
+    RS.script,
+    RST.type,
+    DATE_FORMAT(RS.created_at, '%Y-%m-%d %H:%i:%s') AS created_at,
+    DATE_FORMAT(RS.updated_at, '%Y-%m-%d %H:%i:%s') AS updated_at
   FROM
-    script_example
+    record_script AS RS
+  LEFT JOIN
+    record_script_type AS RST
+  ON
+    RS.record_script_type_id = RST.id
   WHERE
-    deleted_at IS NULL
+    RS.deleted_at IS NULL
+  ORDER BY
+    rand();
 `;
 
 /**
