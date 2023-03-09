@@ -35,13 +35,13 @@ export class VirtualHumanService {
   async uploadFiles(data: object[], avatarId: string, avatarType: string, files: Array<Express.Multer.File>) {
     try {
 
-      console.log(data);
-      console.log(avatarId);
-      console.log(avatarType);
-      console.log(files);
+      // console.log(data);
+      // console.log(avatarId);
+      // console.log(avatarType);
+      // console.log(files);
 
-      console.log(files[0].destination.split('/'));
-      console.log(files[0].destination.split('/')[1]);
+      // console.log(files[0].destination.split('/'));
+      // console.log(files[0].destination.split('/')[1]);
 
       (await this.connection.connectionPool.getConnection()).beginTransaction();
 
