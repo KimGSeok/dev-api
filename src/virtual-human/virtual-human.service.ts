@@ -68,16 +68,16 @@ export class VirtualHumanService {
 
       // TODO Voice 일때
       const body = {
-        urls: urlArr,
-        scripts: scriptArr,
-        audio_twin_version: avatarId
+        "urls": urlArr,
+        "scripts": scriptArr,
+        "audio_twin_version": avatarId
       }
 
       console.log(body);
 
       const response: any = await this.httpService.post(FAST_API_URL, body, options).toPromise();
 
-      console.log(response);
+      console.log(response.data);
 
 
       // TODO
