@@ -50,7 +50,7 @@ export class VirtualHumanService {
       let scriptArr = []; // data
 
       files.forEach(async (item: any) => {
-        urlArr.push(url + `file/download?date=${item.destination.split[2]}$avatar=${avatarId}$file=${item.filename}`);
+        urlArr.push(url + `file/download?date=${item.destination.split('/')[2]}&avatar=${avatarId}&file=${item.filename}`);
       })
 
       data.forEach(async (item: any) => {
