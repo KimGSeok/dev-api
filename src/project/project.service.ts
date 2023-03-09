@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, ServiceUnavailableException } from "@nestjs/common";
 import { HttpService } from '@nestjs/axios';
 import { ConnectionService } from "src/connection/connection.service";
 import { createProjectQuery } from './project.query';
@@ -6,7 +6,10 @@ import { createProjectQuery } from './project.query';
 @Injectable()
 export class ProjectService{
 
-  constructor(private connection: ConnectionService, private readonly httpService: HttpService){}
+  constructor(
+    private connection: ConnectionService,
+    private readonly httpService: HttpService
+  ){}
 
   async createProject(name: string){
     try{
@@ -24,8 +27,10 @@ export class ProjectService{
   async createAvatar(avatarInfo: any){
     try{
 
+      console.log(avatarInfo);
+
       // TODO TTS, Lipsync 구분
-      const { avatar, voice, scriptList } = avatarInfo[0];
+      const { avatar, voice, scriptList } = avatarInfo;
       const mlAvatarArray = [];
 
       // Machine Learing Data Argument Object
@@ -50,6 +55,10 @@ export class ProjectService{
       // TODO Response오면 DB Insert
       const response: any = await this.httpService.post(FAST_API_URL, mlAvatarArray, options).toPromise();
 
+      if(response.data.result === 'failed'){
+        return new ServiceUnavailableException();
+      }
+
       const rawData = await fetch(`http://fury.aitricsdev.com:40068${response.data.audio_path}`);
       const blob = await rawData.blob();
       let result = response.data;
@@ -58,7 +67,6 @@ export class ProjectService{
       result.arrayBuffer = Object.values(new Uint8Array(await blob.arrayBuffer()));
 
       return JSON.stringify(result);
-
     }catch(error){
       console.log(error);
       console.log('프로젝트 아바타 모델 생성중 로직 에러발생');
