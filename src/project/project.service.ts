@@ -1,7 +1,11 @@
 import { Injectable, ServiceUnavailableException } from "@nestjs/common";
 import { HttpService } from '@nestjs/axios';
 import { ConnectionService } from "src/connection/connection.service";
-import { createProjectQuery } from './project.query';
+import { getProjectListQuery, createProjectQuery } from './project.query';
+
+interface KeyValueProps{
+  [key:string]: string
+}
 
 @Injectable()
 export class ProjectService{
@@ -11,19 +15,47 @@ export class ProjectService{
     private readonly httpService: HttpService
   ){}
 
-  async createProject(name: string){
+  /**
+   * Description: 프로젝트 생성
+   * Date: 2023.03.11
+   * Author: Kim Gyeong Seok
+   */
+  async getProjectList(userInfo: KeyValueProps){
     try{
 
       // Query
-      const [response, field] = await this.connection.connectionPool.query(createProjectQuery, [name]);
+      const [response, field] = await this.connection.connectionPool.query(getProjectListQuery, [userInfo.id]);
       return response;
     }catch(error){
-      console.log(error);
+      console.error(error);
+      console.log('프로젝트 목록 조회중 로직 에러발생');
+      return error;
+    }
+  }
+
+  /**
+   * Description: 프로젝트 생성
+   * Date: 2023.03.11
+   * Author: Kim Gyeong Seok
+   */
+  async createProject(name: string, userInfo: KeyValueProps, accessToken: string){
+    try{
+
+      // Query
+      const [response, field] = await this.connection.connectionPool.query(createProjectQuery, [userInfo.id, name]);
+      return response;
+    }catch(error){
+      console.error(error);
       console.log('프로젝트 생성중 로직 에러발생');
       return error;
     }
   }
 
+  /**
+   * Description: 프로젝트 내 컨텐츠 생성(아바타, 목소리)
+   * Date: 2023.03.11
+   * Author: Kim Gyeong Seok
+   */
   async createAvatar(avatarInfo: any){
     try{
 
@@ -68,7 +100,7 @@ export class ProjectService{
 
       return JSON.stringify(result);
     }catch(error){
-      console.log(error);
+      console.error(error);
       console.log('프로젝트 아바타 모델 생성중 로직 에러발생');
       return error;
     }

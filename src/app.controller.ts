@@ -10,45 +10,35 @@ export class AppController {
     return this.appService.getHello();
   }
 
-  @Get("/:id")
-  getOne(@Param("id") props: string) {
-    try {
+  // @Post()
+  // createAvatar(@Body() data: object) {
+  //   console.log(data);
 
-      return `this will return ${props}`;
-    } catch (err) {
-      console.error(err);
-    }
-  }
+  //   try {
 
-  @Post()
-  createAvatar(@Body() data: object) {
-    console.log(data);
+  //   } catch (err) {
 
-    try {
+  //   }
+  // }
 
-    } catch (err) {
+  // @Delete()
+  // DeleteAvatar() {
 
-    }
-  }
+  // }
 
-  @Delete()
-  DeleteAvatar() {
+  // @Put() /* All Updates */
+  // ModifyAllAvatar() {
 
-  }
+  // }
 
-  @Put() /* All Updates */
-  ModifyAllAvatar() {
+  // @Patch('/:id') /* Someone Updates */
+  // ModifyAvatar(@Param('id') id: string, @Body() data) {
+  //   try {
+  //     console.log(data);
 
-  }
+  //   } catch (err) {
 
-  @Patch('/:id') /* Someone Updates */
-  ModifyAvatar(@Param('id') id: string, @Body() data) {
-    try {
-      console.log(data);
+  //   }
 
-    } catch (err) {
-
-    }
-
-  }
+  // }
 }

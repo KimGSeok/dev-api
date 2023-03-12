@@ -1,4 +1,5 @@
-import { Body, Controller, Get, Post, UseInterceptors, Bind, UploadedFiles } from '@nestjs/common';
+import { Body, Controller, Get, Post, Request, UseInterceptors, UseGuards, UploadedFiles } from '@nestjs/common';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { multerOptions } from 'src/lib/multer';
 import { VirtualHumanService } from './virtual-human.service';
@@ -9,7 +10,7 @@ export class VirtualHumanController {
   constructor(private service: VirtualHumanService) { }
 
   @Get('/getScripts')
-  async getVoiceScriptExample() {
+  async getVoiceRecordScript() {
     try {
 
       const result = await this.service.getVoiceScriptExampleList();
@@ -22,17 +23,21 @@ export class VirtualHumanController {
     }
   }
 
+  @UseGuards(JwtAuthGuard)
   @Post('/upload')
   @UseInterceptors(FilesInterceptor('files', null, multerOptions))
-  async uploadAvatar(@Body() res: any, @UploadedFiles() files: Array<Express.Multer.File>) {
+  async uploadVirtualHuman(@Request() req: any, @Body() res: any, @UploadedFiles() files: Array<Express.Multer.File>) {
     try {
 
       // Parameter
-      const data = JSON.parse(res.data);
-      const avatarId = res.avatarId;
-      const avatarType = res.avatarType;
+      const userInfo = req.user;
+      console.log(res.data);
+      const data = res.data ? JSON.parse(res.data) : '';
+      const virtualHumanName = res.virtualHumanName;
+      const virtualHumanId = res.virtualHumanId;
+      const virtualHumanType = res.virtualHumanType;
 
-      const response = await this.service.uploadFiles(data, avatarId, avatarType, files);
+      const response = await this.service.uploadFiles(userInfo, data, virtualHumanName, virtualHumanId, virtualHumanType, files);
       return response;
     } catch (error) {
 

@@ -52,7 +52,6 @@ export class LoggerMiddleWare implements NestMiddleware {
     FileController,
     UserController,
     AuthController,
-    UserController
   ],
   providers: [
     AppService,

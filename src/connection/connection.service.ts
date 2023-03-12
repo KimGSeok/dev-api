@@ -15,7 +15,7 @@ export class ConnectionService implements OnModuleInit {
       port: parseInt(process.env.DB_PORT as string) ?? 3306,
       database: process.env.DB_DATABASE as string,
       typeCast: function (field, next) {
-        if (field.type === 'VAR_STRING') {
+        if (field.type === 'VAR_STRING' || field.type === 'STRING') {
           return field.string('utf-8');
         }
         return next();

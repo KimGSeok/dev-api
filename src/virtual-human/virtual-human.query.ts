@@ -24,26 +24,69 @@ export const getRecordScriptQuery = `
 `;
 
 /**
- * Description: 음성 및 영상 촬영 후, 생성된 파일로 아바타 자원파일 생성
- * Date: 2023.02.08
+ * Description: 음성 및 영상 촬영 후, 우선 생성 가상인간
+ * Date: 2023.03.11
  * Author: Kim Gyeong Seok
  */
-export const createAvatarQuery = `
+export const createVirtualHumanQuery = `
   INSERT
   INTO
-    avatar_resource
-  VALUES
+    virtual_human
     (
-      uuid = ?,
-      avatar_id = ?,
-      script_type = ?,
-      avatar_type = ?,
-      script = ?,
-      path = ?,
-      download_url = ?,
-      file_name = ?,
-      created_at = NOW(),
-      updated_at = NOW(),
-      deleted_at = NOW()
+      uuid,
+      organization_id,
+      user_id,
+      name,
+      type,
+      status,
+      record_script_count,
+      created_at,
+      updated_at
+    )
+    VALUES
+    (
+      ?,
+      ?,
+      ?,
+      ?,
+      ?,
+      'start',
+      ?,
+      NOW(),
+      NOW()
+    )
+`
+
+/**
+ * Description: 음성 및 영상 촬영 한 가상인간의 녹음 스크립트
+ * Date: 2023.03.11
+ * Author: Kim Gyeong Seok
+ */
+export const createVirtualHumanRecordResourceQuery = `
+  INSERT
+  INTO
+    record_resource
+    (
+      uuid,
+      virtual_human_id,
+      record_script_id,
+      record_type,
+      file_name,
+      storage_path,
+      download_url,
+      created_at,
+      updated_at
+    )
+    VALUES
+    (
+      uuid(),
+      ?,
+      ?,
+      ?,
+      ?,
+      ?,
+      ?,
+      NOW(),
+      NOW()
     )
 `

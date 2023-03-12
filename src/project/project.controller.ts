@@ -1,30 +1,38 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Request, Post, Response, UseGuards } from '@nestjs/common';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { ProjectService } from './project.service';
 
 @Controller('project')
 export class ProjectController {
 
-  constructor(private service: ProjectService) { }
+  constructor(private service: ProjectService) {}
 
+  @UseGuards(JwtAuthGuard)
   @Get()
-  getProjectLists() {
+  async getProjectLists(@Request() req: any, @Response() res:any) {
     try {
 
+      const userInfo = req.user;
+      const response = await this.service.getProjectList(userInfo);
+
+      return res.status(200).send(response);
     } catch (error) {
       console.log(error);
-      console.log('프로젝트 조회중 에러발생');
+      console.error('프로젝트 조회중 에러발생');
       return error;
     }
   }
 
+  @UseGuards(JwtAuthGuard)
   @Post()
-  async createProject(@Body() res: any) {
-
+  async createProject(@Request() req: any, @Body() body: any) {
     try {
 
       // Parameter
-      const name: string = res.projectName;
-      const response = await this.service.createProject(name);
+      const name: string = body.projectName;
+      const userInfo = req.user;
+      const accessToken = req.headers.authorization;
+      const response = await this.service.createProject(name, userInfo, accessToken);
       return response;
     } catch (error) {
 

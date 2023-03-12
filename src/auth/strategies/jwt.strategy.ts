@@ -13,9 +13,8 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     })
   }
 
-  async validate(payload: any){
-    return {
-      id: payload.id
-    }
+  async validate(payload: any): Promise<any>{
+    // TODO AccessToken 검증 및 확인
+    return payload;
   }
 }

@@ -1,10 +1,15 @@
 import { Injectable } from "@nestjs/common";
 import { UserService } from "src/user/user.service";
 import { JwtService } from '@nestjs/jwt';
+import * as bcrypt from 'bcrypt';
+import { ConnectionService } from "src/connection/connection.service";
+import { checkUserQuery, getUserInfo } from "src/user/user.query";
 
 @Injectable()
 export class AuthService {
+
   constructor(
+    private connection: ConnectionService,
     private readonly userService: UserService,
     private readonly jwtService: JwtService
   ) {}
@@ -12,12 +17,11 @@ export class AuthService {
   async validateUser(id: string, password: string) {
     try {
 
-      // TODO 등록된 회원정보와 일치하는지 확인(암호화 및 복호화 확인)
-      if (id === 'admin@dooboon.com' && password === 'admin1234!@')
+      const [response, field] = await this.connection.connectionPool.query(checkUserQuery, [id]);
 
-        // TODO Bcrypt
-
-        return { id, password };
+      if(response[0].cnt > 0 && await bcrypt.compare(password, response[0].password)){
+        return { id, password }
+      }
       else
         return null;
     } catch (error) {
@@ -30,18 +34,10 @@ export class AuthService {
   async login(user: any) {
     try {
 
-      console.log('로그인 로직');
-      console.log('사용자 정보');
-      console.log(user);
+      // 사용자 정보 조회해서 id, count, password, uuid를 담아서 뱉기
+      const [response, field] = await this.connection.connectionPool.query(getUserInfo, [user.id]);
+      const payload = response[0];
 
-      const payload = {
-        id: user.id,
-        password: user.password
-      };
-
-      console.log(payload);
-
-      // TODO JWT Token 발급 로직 및 Return
       return {
         accessToken: this.jwtService.sign(payload)
       }
