@@ -19,6 +19,8 @@ export const getProjectListQuery =`
     user_id = ?
   AND
     deleted_at IS NULL
+  ORDER BY
+    id DESC;
 `
 
 /**

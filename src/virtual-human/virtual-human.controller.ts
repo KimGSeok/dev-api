@@ -31,7 +31,6 @@ export class VirtualHumanController {
 
       // Parameter
       const userInfo = req.user;
-      console.log(res.data);
       const data = res.data ? JSON.parse(res.data) : '';
       const virtualHumanName = res.virtualHumanName;
       const virtualHumanId = res.virtualHumanId;
