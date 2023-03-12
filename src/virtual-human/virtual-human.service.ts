@@ -72,9 +72,12 @@ export class VirtualHumanService {
           "audio_twin_version": virtualHumanId
         } : 
         {
-          "video_twin_version": "string",
-          "video_url": "string"
+          "video_twin_version": virtualHumanId,
+          "video_url": urlArr[0]
         };
+
+
+      console.log(body);
       
 
       const response: any = await this.httpService.post(FAST_API_URL, body, options).toPromise();
