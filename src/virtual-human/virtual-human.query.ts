@@ -1,4 +1,32 @@
 /**
+ * Description: 가상인간 목록 조회
+ * Date: 2023.03.13
+ * Author: Kim Gyeong Seok
+ */
+export const getVirtualHumanListQuery = `
+  SELECT
+    id,
+    uuid,
+    name,
+    type,
+    status,
+    record_script_count,
+    image_file_url,
+    ml_model,
+    DATE_FORMAT(created_at, '%Y-%m-%d') AS created_date_at,
+    DATE_FORMAT(created_at, '%Y-%m-%d %H:%i:%s') AS created_at,
+    DATE_FORMAT(updated_at, '%Y-%m-%d %H:%i:%s') AS updated_at
+  FROM
+    virtual_human
+  WHERE
+    user_id = ?
+  AND
+    deleted_at IS NULL
+  ORDER BY
+    id desc;
+`;
+
+/**
  * Description: 음성 녹음 시 필요한 녹음 스크립트 목록
  * Date: 2023.02.05
  * Author: Kim Gyeong Seok

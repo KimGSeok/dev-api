@@ -4,10 +4,26 @@ import { FilesInterceptor } from '@nestjs/platform-express';
 import { multerOptions } from 'src/lib/multer';
 import { VirtualHumanService } from './virtual-human.service';
 
-@Controller('avatar')
+@Controller('virtual-human')
 export class VirtualHumanController {
 
   constructor(private service: VirtualHumanService) { }
+
+  @UseGuards(JwtAuthGuard)
+  @Get()
+  async getVirtualHumanList(@Request() req: any){
+    try{
+
+      // Parameter
+      const userInfo = req.user;
+      const result = await this.service.getVirtualHumanList(userInfo);
+      return result;
+    }catch(error){
+      console.log('가상인간 목록 조회중 에러발생');
+      console.error(error);
+      return error;
+    }
+  }
 
   @Get('/getScripts')
   async getVoiceRecordScript() {
@@ -16,8 +32,7 @@ export class VirtualHumanController {
       const result = await this.service.getVoiceScriptExampleList();
       return result;
     } catch (error) {
-
-      console.log('아바타 스크립트 조회중 에러발생');
+      console.log('가상인간 스크립트 조회중 에러발생');
       console.error(error);
       return error;
     }
@@ -40,7 +55,7 @@ export class VirtualHumanController {
       return response;
     } catch (error) {
 
-      console.log('아바타 스크립트 생성중 에러발생');
+      console.log('가상인간 스크립트 생성중 에러발생');
       console.log(error);
       return error;
     }

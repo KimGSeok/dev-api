@@ -1,19 +1,18 @@
 import { Injectable } from "@nestjs/common";
 import { HttpService } from '@nestjs/axios';
 import { ConnectionService } from "src/connection/connection.service";
-import { getRecordScriptQuery, createVirtualHumanQuery, createVirtualHumanRecordResourceQuery } from './virtual-human.query';
+import {
+  getVirtualHumanListQuery,
+  getRecordScriptQuery,
+  createVirtualHumanQuery,
+  createVirtualHumanRecordResourceQuery
+} from './virtual-human.query';
 
-let url: string;
+// Environment
+let url: string = process.env.NODE_ENV === 'development' ? 'http://localhost:30001/' : 'https://api.cidev.kr/';
 interface KeyValueProps{
   [key:string]: string
 }
-
-
-// Environment
-if (process.env.NODE_ENV === 'development')
-  url = 'http://localhost:30001/';
-else
-  url = 'https://api.cidev.kr/';
 
 @Injectable()
 export class VirtualHumanService {
@@ -23,6 +22,19 @@ export class VirtualHumanService {
     private readonly httpService: HttpService
   ) { }
 
+  async getVirtualHumanList(userInfo: KeyValueProps){
+    try {
+
+      // Query
+      const [response, field] = await this.connection.connectionPool.query(getVirtualHumanListQuery, [userInfo.id]);
+      return response;
+    } catch (error) {
+      console.log('가상인간 목록 조회 로직 에러발생');
+      console.log(error);
+      return error;
+    }
+  }
+
   async getVoiceScriptExampleList() {
     try {
 
@@ -30,7 +42,7 @@ export class VirtualHumanService {
       const [response, field] = await this.connection.connectionPool.query(getRecordScriptQuery, []);
       return response;
     } catch (error) {
-      console.log('아바타 스크립트 조회 로직 에러발생');
+      console.log('가상인간 스크립트 조회 로직 에러발생');
       console.log(error);
       return error;
     }
@@ -79,7 +91,6 @@ export class VirtualHumanService {
 
       console.log(body);
       
-
       const response: any = await this.httpService.post(FAST_API_URL, body, options).toPromise();
 
       console.log('----------------------- 가상인간 생성 결과 ---------------------------');
@@ -115,7 +126,7 @@ export class VirtualHumanService {
     } catch (error) {
 
       (await this.connection.connectionPool.getConnection()).rollback();
-      console.log('아바타 스크립트 생성 로직 에러발생');
+      console.log('가상인간 스크립트 생성 로직 에러발생');
       console.error(error);
       return error;
     }
