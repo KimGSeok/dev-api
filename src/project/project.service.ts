@@ -61,22 +61,33 @@ export class ProjectService{
 
       console.log(avatarInfo);
 
-      // TODO TTS, Lipsync 구분
+      // TTS, Lipsync 구분
       const { avatar, voice, scriptList } = avatarInfo;
+      const contentType = avatar.name === '' ? 'audio' : 'video';
       const mlAvatarArray = [];
-
+      
       // Machine Learing Data Argument Object
       scriptList.forEach((el: any) => {
+
+        // Audio(Voice)
         mlAvatarArray.push({
           'script': el.text,
           'speed': el.speed,
           'pause_second': el.pauseSecond,
-          'audio_twin_version': voice.voiceModel ? voice.voiceModel : '01831c53-3a8b-7a50-bd97-v16ch5f8d45s'
+          'audio_twin_version': voice.model ? voice.model : '01831c53-3a8b-7a50-bd97-v16ch5f8d45s'
         })
+
+        // Video(Avatar)
+        if(contentType === 'video'){
+          mlAvatarArray.push({
+            'cut_start_time': 0,
+            'cut_end_time': -1,
+            'video_twin_version': avatar.model
+          })
+        }
       });
 
-      // Fast API 요청
-      const FAST_API_URL = 'http://fury.aitricsdev.com:40068/inference';
+      const FAST_API_URL = contentType === 'audio' ? process.env.FAST_API_INFERENCE_AUDIO_URL : process.env.FAST_API_INFERENCE_VIDEO_URL;
       const options = {
         headers: {
           'accept': 'application/json',
