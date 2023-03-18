@@ -64,33 +64,29 @@ export class ProjectService {
       // TTS, Lipsync 구분
       const { avatar, voice, scriptList } = avatarInfo;
       const contentType = avatar.name === '' ? 'audio' : 'video';
-      const mlAvatarArray = [];
+      const mlObject: any = {};
+      const mlVoiceArray = [];
 
       // Machine Learing Data Argument Object
       scriptList.forEach((el: any) => {
-
-        // Video(Avatar)
-        if (contentType === 'video') {
-          mlAvatarArray.push({
-            'script': el.text,
-            'speed': el.speed,
-            'pause_second': el.pauseSecond,
-            'audio_twin_version': voice.model ? voice.model : '01831c53-3a8b-7a50-bd97-v16ch5f8d45s',
-            'cut_start_time': 0,
-            'cut_end_time': -1,
-            'video_twin_version': avatar.model
-          })
-        }
-        // Audio(Voice)
-        else {
-          mlAvatarArray.push({
-            'script': el.text,
-            'speed': el.speed,
-            'pause_second': el.pauseSecond,
-            'audio_twin_version': voice.model ? voice.model : '01831c53-3a8b-7a50-bd97-v16ch5f8d45s'
-          })
-        }
+        mlVoiceArray.push({
+          'script': el.text,
+          'speed': el.speed,
+          'pause_second': el.pauseSecond,
+          'audio_twin_version': voice.model ? voice.model : '01831c53-3a8b-7a50-bd97-v16ch5f8d45s'
+        })
       });
+
+      mlObject.TTSItems = mlVoiceArray;
+      if (contentType === 'video'){
+        mlObject.LipsyncItems = {
+          'cut_start_time': 0,
+          'cut_end_time': -1,
+          'video_twin_version': avatar.model
+        }
+      }
+
+      console.log(mlObject);
 
       const FAST_API_URL = contentType === 'audio' ? process.env.FAST_API_INFERENCE_AUDIO_URL : process.env.FAST_API_INFERENCE_VIDEO_URL;
       const options = {
@@ -101,17 +97,16 @@ export class ProjectService {
       };
 
       console.log(FAST_API_URL);
-      console.log(mlAvatarArray);
 
       // TODO Response오면 DB Insert
-      const response: any = await this.httpService.post(FAST_API_URL, mlAvatarArray, options).toPromise();
+      const response: any = await this.httpService.post(FAST_API_URL, mlObject, options).toPromise();
+
+      console.log(response);
+      console.log(response.data);
 
       if (response.data.result === 'failed') {
         return new ServiceUnavailableException();
       }
-
-      console.log(response);
-      console.log(response.data);
 
       const rawData = await fetch(`http://fury.aitricsdev.com:40068${response.data.audio_path}`);
       const blob = await rawData.blob();

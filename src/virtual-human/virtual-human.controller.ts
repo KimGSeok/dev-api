@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Request, UseInterceptors, UseGuards, UploadedFiles } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Request, UseInterceptors, UseGuards, UploadedFiles } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { multerOptions } from 'src/lib/multer';
@@ -33,6 +33,21 @@ export class VirtualHumanController {
       return result;
     } catch (error) {
       console.log('가상인간 스크립트 조회중 에러발생');
+      console.error(error);
+      return error;
+    }
+  }
+
+  @Get('/resource/:params')
+  async getVirtualHumanRecordResource(@Param('params') params: string,) {
+    try {
+
+      const id = params.split('&')[0];
+      const uuid = params.split('&')[1].replace('uuid=','');
+      const result = await this.service.getVirtualHumanResourceList(id, uuid);
+      return result;
+    } catch (error) {
+      console.log('가상인간 상세 정보 조회중 에러발생');
       console.error(error);
       return error;
     }

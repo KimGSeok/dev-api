@@ -5,7 +5,8 @@ import {
   getVirtualHumanListQuery,
   getRecordScriptQuery,
   createVirtualHumanQuery,
-  createVirtualHumanRecordResourceQuery
+  createVirtualHumanRecordResourceQuery,
+  getVirtualHumanResourceListQuery
 } from './virtual-human.query';
 
 // Environment
@@ -43,6 +44,21 @@ export class VirtualHumanService {
       return response;
     } catch (error) {
       console.log('가상인간 스크립트 조회 로직 에러발생');
+      console.log(error);
+      return error;
+    }
+  }
+
+  async getVirtualHumanResourceList(id: string, uuid: string){
+    try {
+
+      // TODO uuid remove
+
+      // Query
+      const [response, field] = await this.connection.connectionPool.query(getVirtualHumanResourceListQuery, [id, uuid]);
+      return response;
+    } catch (error) {
+      console.log('가상인간 상세정보 조회 로직 에러발생');
       console.log(error);
       return error;
     }
@@ -90,11 +106,6 @@ export class VirtualHumanService {
 
 
       console.log(body);
-      
-      const response: any = await this.httpService.post(FAST_API_URL, body, options).toPromise();
-
-      console.log('----------------------- 가상인간 생성 결과 ---------------------------');
-      console.log(response.data);
 
       // Virtual_human Table Create Query
       const [virtualHumanResponse]: any = await this.connection.connectionPool.query(createVirtualHumanQuery, [
@@ -121,6 +132,10 @@ export class VirtualHumanService {
       });
 
       (await this.connection.connectionPool.getConnection()).commit();
+      
+      await this.httpService.post(FAST_API_URL, body, options).toPromise();
+
+      console.log('----------------------- 가상인간 생성 결과 ---------------------------');
 
       return ;
     } catch (error) {

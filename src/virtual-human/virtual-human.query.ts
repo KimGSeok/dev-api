@@ -52,6 +52,35 @@ export const getRecordScriptQuery = `
 `;
 
 /**
+ * Description: 가상인간 학습 리소스 조회
+ * Date: 2023.03.18
+ * Author: Kim Gyeong Seok
+ */
+export const getVirtualHumanResourceListQuery = `
+  SELECT
+    RR.id,
+    RR.uuid,
+    RR.virtual_human_id,
+    RS.script,
+    RR.record_type,
+    RR.file_name,
+    RR.storage_path,
+    RR.download_url
+  FROM
+    record_resource AS RR
+  LEFT JOIN
+    record_script AS RS
+  ON
+    RR.record_script_id = RS.id
+  WHERE
+    RR.deleted_at IS NULL
+  AND
+    RR.virtual_human_id = ?
+  ORDER BY
+    RR.created_at DESC;
+`;
+
+/**
  * Description: 음성 및 영상 촬영 후, 우선 생성 가상인간
  * Date: 2023.03.11
  * Author: Kim Gyeong Seok
