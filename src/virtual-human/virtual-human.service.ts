@@ -119,7 +119,7 @@ export class VirtualHumanService {
 
         // Virtual_human Record Resource Query
         await this.connection.connectionPool.query(createVirtualHumanRecordResourceQuery, [
-          virtualHumanResponse.affectedRows, // virtual_human_id
+          virtualHumanResponse.insertId, // virtual_human_id
           avatarType === 'voice' ? script.id : '', // record_script_id
           avatarType, // record_type
           item.filename, // file_name
