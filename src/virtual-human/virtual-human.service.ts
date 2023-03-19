@@ -84,7 +84,7 @@ export class VirtualHumanService {
       })
 
       // Fast API 요청
-      const FAST_API_URL = 'http://fury.aitricsdev.com:40068/finetune';
+      const FAST_API_URL = avatarType === 'audio' ? process.env.FAST_API_FINETUNE_AUDIO_URL : process.env.FAST_API_FINETUNE_VIDEO_URL;
       const options = {
         headers: {
           'accept': 'application/json',
