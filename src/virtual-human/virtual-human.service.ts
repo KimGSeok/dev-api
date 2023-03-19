@@ -84,7 +84,7 @@ export class VirtualHumanService {
       })
 
       // Fast API 요청
-      const FAST_API_URL = avatarType === 'audio' ? process.env.FAST_API_FINETUNE_AUDIO_URL : process.env.FAST_API_FINETUNE_VIDEO_URL;
+      const FAST_API_URL = avatarType === 'voice' ? process.env.FAST_API_FINETUNE_AUDIO_URL : process.env.FAST_API_FINETUNE_VIDEO_URL;
       const options = {
         headers: {
           'accept': 'application/json',
@@ -101,7 +101,7 @@ export class VirtualHumanService {
         } : 
         {
           "video_twin_version": virtualHumanId,
-          "video_url": urlArr[0]
+          "url": urlArr[0]
         };
       
       // Virtual_human Table Create Query
