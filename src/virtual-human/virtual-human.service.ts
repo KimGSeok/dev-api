@@ -103,11 +103,7 @@ export class VirtualHumanService {
           "video_twin_version": virtualHumanId,
           "video_url": urlArr[0]
         };
-
-      this.httpService.post(FAST_API_URL, body, options).toPromise();
-
-      console.log(body);
-
+      
       // Virtual_human Table Create Query
       const [virtualHumanResponse]: any = await this.connection.connectionPool.query(createVirtualHumanQuery, [
         virtualHumanId,
@@ -133,10 +129,14 @@ export class VirtualHumanService {
       });
 
       (await this.connection.connectionPool.getConnection()).commit();
+
+      (await this.connection.connectionPool.getConnection()).destroy();
       
       console.log('----------------------- 가상인간 생성 결과 ---------------------------');
 
-      return ;
+      this.httpService.post(FAST_API_URL, body, options).toPromise();
+
+      return;
     } catch (error) {
 
       (await this.connection.connectionPool.getConnection()).rollback();
