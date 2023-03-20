@@ -38,16 +38,31 @@ export class VirtualHumanController {
     }
   }
 
-  @Get('/resource/:params')
-  async getVirtualHumanRecordResource(@Param('params') params: string,) {
+  @Get('/:id')
+  async getVirtualHumanDetailInfo(@Param('id') id: string) {
     try {
+
+      const result = await this.service.getVirtualHumanDetailInfo(id);
+      return result;
+    } catch (error) {
+      console.log('가상인간 상세정보 조회중 에러발생');
+      console.error(error);
+      return error;
+    }
+  }
+
+  @Get('/resource/:params')
+  async getVirtualHumanRecordResource(@Param('params') params: string) {
+    try {
+
+      // TODO
 
       const id = params.split('&')[0];
       const uuid = params.split('&')[1].replace('uuid=','');
       const result = await this.service.getVirtualHumanResourceList(id, uuid);
       return result;
     } catch (error) {
-      console.log('가상인간 상세 정보 조회중 에러발생');
+      console.log('가상인간 녹음 리소스 조회중 에러발생');
       console.error(error);
       return error;
     }

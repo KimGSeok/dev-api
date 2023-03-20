@@ -3,6 +3,7 @@ import { HttpService } from '@nestjs/axios';
 import { ConnectionService } from "src/connection/connection.service";
 import {
   getVirtualHumanListQuery,
+  getVirtualHumanDetailInfoQuery,
   getRecordScriptQuery,
   createVirtualHumanQuery,
   createVirtualHumanRecordResourceQuery,
@@ -28,6 +29,21 @@ export class VirtualHumanService {
 
       // Query
       const [response, field] = await this.connection.connectionPool.query(getVirtualHumanListQuery, [userInfo.id]);
+      return response;
+    } catch (error) {
+      console.log('가상인간 목록 조회 로직 에러발생');
+      console.log(error);
+      return error;
+    }
+  }
+
+  async getVirtualHumanDetailInfo(id: string){
+    try {
+
+      // TODO 조건주고 위에 목록 불러오기랑 합치기
+
+      // Query
+      const [response, field] = await this.connection.connectionPool.query(getVirtualHumanDetailInfoQuery, [id]);
       return response;
     } catch (error) {
       console.log('가상인간 목록 조회 로직 에러발생');
@@ -100,7 +116,7 @@ export class VirtualHumanService {
           "audio_twin_version": virtualHumanId
         } : 
         {
-          "video_twin_version": virtualHumanId,
+          "video_twin_version": 'bc7b4f1b-0cc7-40c1-b831-3293c67e14b1',
           "url": urlArr[0]
         };
       

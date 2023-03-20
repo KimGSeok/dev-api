@@ -96,19 +96,19 @@ export class ProjectService {
         }
       };
 
-      console.log(FAST_API_URL);
-
       // TODO Response오면 DB Insert
       const response: any = await this.httpService.post(FAST_API_URL, mlObject, options).toPromise();
-
-      console.log(response);
-      console.log(response.data);
 
       if (response.data.result === 'failed') {
         return new ServiceUnavailableException();
       }
 
-      const rawData = await fetch(`http://fury.aitricsdev.com:40068${response.data.audio_path}`);
+      let rawData;
+      if(contentType === 'audio')
+        rawData = await fetch(`http://fury.aitricsdev.com:40068${response.data.audio_path}`);
+      else
+        rawData = await fetch(`http://fury.aitricsdev.com:40065${response.data.video_path}`);
+
       const blob = await rawData.blob();
       let result = response.data;
 
