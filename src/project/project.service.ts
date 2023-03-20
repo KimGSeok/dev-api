@@ -59,12 +59,10 @@ export class ProjectService {
   async createAvatar(avatarInfo: any) {
     try {
 
-      console.log(avatarInfo);
-
       // TTS, Lipsync 구분
       const { avatar, voice, scriptList } = avatarInfo;
       const contentType = avatar.name === '' ? 'audio' : 'video';
-      const mlObject: any = {};
+      let mlObject: any = {};
       const mlVoiceArray = [];
 
       // Machine Learing Data Argument Object
@@ -77,16 +75,17 @@ export class ProjectService {
         })
       });
 
-      mlObject.TTSItems = mlVoiceArray;
       if (contentType === 'video'){
+        mlObject.TTSItems = mlVoiceArray;
         mlObject.LipsyncItems = {
           'cut_start_time': 0,
           'cut_end_time': -1,
           'video_twin_version': avatar.model
         }
       }
-
-      console.log(mlObject);
+      else{
+        mlObject = mlVoiceArray;
+      }
 
       const FAST_API_URL = contentType === 'audio' ? process.env.FAST_API_INFERENCE_AUDIO_URL : process.env.FAST_API_INFERENCE_VIDEO_URL;
       const options = {
