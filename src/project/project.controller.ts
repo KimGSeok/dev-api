@@ -46,8 +46,6 @@ export class ProjectController {
   async createAvatarModel(@Body() res: any) {
     try {
 
-      console.log("---------컨트롤러-----------");
-
       // Parameter
       const avatar: object = res;
       const response = await this.service.createAvatar(avatar);

@@ -98,6 +98,8 @@ export class ProjectService {
       // TODO Response오면 DB Insert
       const response: any = await this.httpService.post(FAST_API_URL, mlObject, options).toPromise();
 
+      console.log(response);
+
       if (response.data.result === 'failed') {
         return new ServiceUnavailableException();
       }
