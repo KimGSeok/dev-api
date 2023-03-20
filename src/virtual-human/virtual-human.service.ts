@@ -116,7 +116,7 @@ export class VirtualHumanService {
           "audio_twin_version": virtualHumanId
         } : 
         {
-          "video_twin_version": 'bc7b4f1b-0cc7-40c1-b831-3293c67e14b1',
+          "video_twin_version": virtualHumanId,
           "url": urlArr[0]
         };
       
