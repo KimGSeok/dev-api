@@ -75,7 +75,7 @@ export class ProjectService {
         })
       });
 
-      if (contentType === 'video'){
+      if (contentType === 'video') {
         mlObject.TTSItems = mlVoiceArray;
         mlObject.LipsyncItems = {
           'cut_start_time': 0,
@@ -83,7 +83,7 @@ export class ProjectService {
           'video_twin_version': avatar.model
         }
       }
-      else{
+      else {
         mlObject = mlVoiceArray;
       }
 
@@ -105,10 +105,10 @@ export class ProjectService {
       }
 
       let rawData;
-      if(contentType === 'audio')
-        rawData = await fetch(`http://fury.aitricsdev.com:40068${response.data.audio_path}`);
+      if (contentType === 'audio')
+        rawData = await fetch(`http://fury.aitricsdev.com:40067${response.data.audio_path}`);
       else
-        rawData = await fetch(`http://fury.aitricsdev.com:40065${response.data.video_path}`);
+        rawData = await fetch(`http://fury.aitricsdev.com:40064${response.data.video_path}`);
 
       const blob = await rawData.blob();
       let result = response.data;
