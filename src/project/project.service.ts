@@ -1,7 +1,7 @@
 import { Injectable, ServiceUnavailableException } from "@nestjs/common";
 import { HttpService } from '@nestjs/axios';
 import { ConnectionService } from "src/connection/connection.service";
-import { getProjectListQuery, createProjectQuery } from './project.query';
+import { getProjectListQuery, getProjectDetailInfoQuery, createProjectQuery } from './project.query';
 
 interface KeyValueProps {
   [key: string]: string
@@ -25,6 +25,24 @@ export class ProjectService {
 
       // Query
       const [response, field] = await this.connection.connectionPool.query(getProjectListQuery, [userInfo.id]);
+      return response;
+    } catch (error) {
+      console.error(error);
+      console.log('프로젝트 목록 조회중 로직 에러발생');
+      return error;
+    }
+  }
+
+  /**
+   * Description: 프로젝트 상세정보 조회
+   * Date: 2023.03.31
+   * Author: Kim Gyeong Seok
+   */
+  async getProjectDetailInfo(projectId: string) {
+    try {
+
+      // Query
+      const [response, field] = await this.connection.connectionPool.query(getProjectDetailInfoQuery, [projectId]);
       return response;
     } catch (error) {
       console.error(error);
