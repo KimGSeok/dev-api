@@ -1,7 +1,17 @@
 import { Injectable, ServiceUnavailableException } from "@nestjs/common";
 import { HttpService } from '@nestjs/axios';
 import { ConnectionService } from "src/connection/connection.service";
-import { getProjectListQuery, getProjectDetailInfoQuery, createProjectQuery } from './project.query';
+import {
+  getProjectListQuery,
+  getProjectDetailInfoQuery,
+  getProjectScriptInfoQuery,
+  isCheckProjectDetailQuery,
+  createProjectQuery,
+  createProjectInformationQuery,
+  updateProjectInformationQuery,
+  createProjectScriptQuery,
+  deleteProjectScriptQuery
+} from './project.query';
 
 interface KeyValueProps {
   [key: string]: string
@@ -42,7 +52,10 @@ export class ProjectService {
     try {
 
       // Query
-      const [response, field] = await this.connection.connectionPool.query(getProjectDetailInfoQuery, [projectId]);
+      const [projectDetailInfo, ] = await this.connection.connectionPool.query(getProjectDetailInfoQuery, [projectId, projectId, projectId]);
+      const [projectScriptInfo, ] = await this.connection.connectionPool.query(getProjectScriptInfoQuery, [projectId]);
+
+      const response = { projectDetailInfo, projectScriptInfo }
       return response;
     } catch (error) {
       console.error(error);
@@ -77,8 +90,10 @@ export class ProjectService {
   async createAvatar(avatarInfo: any) {
     try {
 
+      console.log(avatarInfo);
+
       // TTS, Lipsync 구분
-      const { avatar, voice, scriptList } = avatarInfo;
+      const { projectId, avatar, voice, scriptList } = avatarInfo;
       const contentType = avatar.name === '' ? 'audio' : 'video';
       let mlObject: any = {};
       const mlVoiceArray = [];
@@ -113,20 +128,48 @@ export class ProjectService {
         }
       };
 
-      // TODO Response오면 DB Insert
       const response: any = await this.httpService.post(FAST_API_URL, mlObject, options).toPromise();
-
-      console.log(response);
 
       if (response.data.result === 'failed') {
         return new ServiceUnavailableException();
       }
 
-      let rawData;
-      if (contentType === 'audio')
-        rawData = await fetch(`http://fury.aitricsdev.com:40067${response.data.audio_path}`);
-      else
-        rawData = await fetch(`http://fury.aitricsdev.com:40064${response.data.video_path}`);
+      const downloadUrl = contentType === 'audio' ? `http://fury.aitricsdev.com:40067${response.data.audio_path}` : `http://fury.aitricsdev.com:40064${response.data.video_path}`
+      const rawData = await fetch(downloadUrl);
+
+      // check Detail Info
+      const [isCountDetailInfo, field] = await this.connection.connectionPool.query(isCheckProjectDetailQuery, [projectId]);
+
+      if(isCountDetailInfo[0].count > 0){
+
+        // 기존 상세정보가 존재하면 Update
+        await this.connection.connectionPool.query(updateProjectInformationQuery, [
+          contentType === 'audio' ? (voice.model ? voice.model : '01831c53-3a8b-7a50-bd97-v16ch5f8d45s') : '',
+          contentType === 'audio' ? '' : avatar.model,
+          contentType === 'audio' ? downloadUrl : '',
+          contentType === 'audio' ? '' : downloadUrl,
+          projectId,
+        ]);
+      }
+      else{
+
+        // 기존 상세정보가 존재하지 않으면 Insert
+        await this.connection.connectionPool.query(createProjectInformationQuery, [
+          projectId,
+          contentType === 'audio' ? (voice.model ? voice.model : '01831c53-3a8b-7a50-bd97-v16ch5f8d45s') : '',
+          contentType === 'audio' ? '' : avatar.model,
+          contentType === 'audio' ? downloadUrl : '',
+          contentType === 'audio' ? '' : downloadUrl,
+        ]);
+      }
+
+      // Delete All Script
+      await this.connection.connectionPool.query(deleteProjectScriptQuery, [projectId]);
+
+      // Insert Script
+      for (const el of scriptList) {
+        await this.connection.connectionPool.query(createProjectScriptQuery, [projectId, el.text, el.speed, el.pauseSecond]);
+      }
 
       const blob = await rawData.blob();
       let result = response.data;

@@ -29,24 +29,84 @@ export const getProjectListQuery = `
  * Author: Kim Gyeong Seok
  */
 export const getProjectDetailInfoQuery = `
+	SELECT
+		PR.id,
+		PR.name,
+		PIF.id AS project_information_id,
+		PIF.voice_id,
+		(
+			SELECT
+				name
+			FROM
+				virtual_human AS VH
+			WHERE
+				PR.user_id = VH.user_id 
+			AND
+				VH.uuid = PIF.voice_id
+			AND
+				PIF.project_id = ?
+		) AS voice_name,
+		PIF.avatar_id,
+		(
+			SELECT
+				name
+			FROM
+				virtual_human AS VH
+			WHERE
+				PR.user_id = VH.user_id 
+			AND
+				VH.uuid = PIF.avatar_id 
+			AND
+				PIF.project_id = ?
+		) AS avatar_name,
+		PIF.audio_download_url,
+		PIF.video_download_url
+	FROM
+		project AS PR
+	LEFT JOIN
+		project_information AS PIF
+	ON
+		PR.id = PIF.project_id
+	WHERE
+		PR.id = ?
+	AND
+		PR.deleted_at IS NULL
+`;
+
+/**
+ * Description: 프로젝트 스크립트 상세정보 조회
+ * Date: 2023.04.03
+ * Author: Kim Gyeong Seok
+ */
+export const getProjectScriptInfoQuery = `
+	SELECT
+		id,
+		project_id,
+		script,
+		speed,
+		wait_time
+	FROM
+		project_script
+	WHERE
+		project_id = ?
+	AND
+		deleted_at IS NULL;
+`;
+
+/**
+ * Description: 프로젝트 상세정보 존재여부
+ * Date: 2023.04.03
+ * Author: Kim Gyeong Seok
+ */
+export const isCheckProjectDetailQuery = `
   SELECT
-    PR.id,
-    PR.name,
-    PIF.id AS project_information_id,
-    PIF.voice_id,
-    PIF.avatar_id,
-    PIF.audio_download_url,
-    PIF.video_download_url
+    count(*) AS count
   FROM
-    project AS PR
-  LEFT JOIN
-    project_information AS PIF
-  ON
-    PR.id = PIF.project_id
+    project_information
   WHERE
-    PR.id = ?
+    project_id = ?
   AND
-    PR.deleted_at IS NULL
+    deleted_at IS NULL
 `;
 
 /**
@@ -72,6 +132,102 @@ export const createProjectQuery = `
       ?,
       ?,
       'active',
+      NOW(),
+      NOW()
+    )
+`;
+
+/**
+ * Description: 프로젝트 상세정보 저장
+ * Date: 2023.04.02
+ * Author: Kim Gyeong Seok
+ */
+export const createProjectInformationQuery = `
+  INSERT
+  INTO
+    project_information
+    (
+      project_id,
+      voice_id,
+      avatar_id,
+      audio_download_url,
+      video_download_url,
+      created_at,
+      updated_at
+    )
+    VALUES
+    (
+      ?,
+      ?,
+      ?,
+      ?,
+      ?,
+      NOW(),
+      NOW()
+    )
+`
+
+/**
+ * Description: 프로젝트 상세정보 수정
+ * Date: 2023.04.03
+ * Author: Kim Gyeong Seok
+ */
+export const updateProjectInformationQuery = `
+  UPDATE
+    project_information
+  SET
+    voice_id = ?,
+    avatar_id = ?,
+    audio_download_url = ?,
+    video_download_url = ?,
+    updated_at = NOW()
+  WHERE
+    project_id = ?
+  AND
+    deleted_at IS NULL
+`
+
+/**
+ * Description: 프로젝트 컨텐츠 스크립트 삭제
+ * Date: 2023.04.03
+ * Author: Kim Gyeong Seok
+ */
+export const deleteProjectScriptQuery = `
+  UPDATE
+		project_script
+  SET
+		deleted_at = NOW()
+	WHERE
+		project_id = ?
+	AND
+		deleted_at IS NULL;
+`
+
+/**
+ * Description: 프로젝트 컨텐츠 변환 스크립트 저장
+ * Date: 2023.04.02
+ * Author: Kim Gyeong Seok
+ */
+export const createProjectScriptQuery = `
+  INSERT
+  INTO
+		project_script
+    (
+      uuid,
+      project_id,
+			script,
+			speed,
+			wait_time,
+			created_at,
+			updated_at
+    )
+    VALUES
+    (
+      uuid(),
+      ?,
+			?,
+			?,
+			?,
       NOW(),
       NOW()
     )

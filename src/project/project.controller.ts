@@ -30,7 +30,7 @@ export class ProjectController {
 
       const projectId = id;
       const response = await this.service.getProjectDetailInfo(projectId);
-      return res.status(200).send(response[0]);
+      return res.status(200).send(response);
     } catch (error) {
       console.log(error);
       console.error('프로젝트 조회중 에러발생');
