@@ -10,7 +10,8 @@ import {
   createProjectInformationQuery,
   updateProjectInformationQuery,
   createProjectScriptQuery,
-  deleteProjectScriptQuery
+  deleteProjectScriptQuery,
+  deleteProjectQuery
 } from './project.query';
 
 interface KeyValueProps {
@@ -52,8 +53,8 @@ export class ProjectService {
     try {
 
       // Query
-      const [projectDetailInfo, ] = await this.connection.connectionPool.query(getProjectDetailInfoQuery, [projectId, projectId, projectId]);
-      const [projectScriptInfo, ] = await this.connection.connectionPool.query(getProjectScriptInfoQuery, [projectId]);
+      const [projectDetailInfo,] = await this.connection.connectionPool.query(getProjectDetailInfoQuery, [projectId, projectId, projectId]);
+      const [projectScriptInfo,] = await this.connection.connectionPool.query(getProjectScriptInfoQuery, [projectId]);
 
       const response = { projectDetailInfo, projectScriptInfo }
       return response;
@@ -140,7 +141,7 @@ export class ProjectService {
       // check Detail Info
       const [isCountDetailInfo, field] = await this.connection.connectionPool.query(isCheckProjectDetailQuery, [projectId]);
 
-      if(isCountDetailInfo[0].count > 0){
+      if (isCountDetailInfo[0].count > 0) {
 
         // 기존 상세정보가 존재하면 Update
         await this.connection.connectionPool.query(updateProjectInformationQuery, [
@@ -151,7 +152,7 @@ export class ProjectService {
           projectId,
         ]);
       }
-      else{
+      else {
 
         // 기존 상세정보가 존재하지 않으면 Insert
         await this.connection.connectionPool.query(createProjectInformationQuery, [
@@ -181,6 +182,23 @@ export class ProjectService {
     } catch (error) {
       console.error(error);
       console.log('프로젝트 아바타 모델 생성중 로직 에러발생');
+      return error;
+    }
+  }
+
+  /**
+   * Description: 프로젝트 삭제 처리
+   * Date: 2023.04.06
+   * Author: Kim Gyeong Seok
+   */
+  async deleteProject(id: string) {
+    try {
+      // 기존 상세정보가 존재하지 않으면 Insert
+      const [response,] = await this.connection.connectionPool.query(deleteProjectQuery, [id]);
+      return response;
+    } catch (error) {
+      console.error(error);
+      console.log('프로젝트 삭제중 로직 에러발생');
       return error;
     }
   }

@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Request, Post, Response, UseGuards, Param } from '@nestjs/common';
+import { Body, Controller, Get, Request, Post, Response, UseGuards, Param, Delete } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { ProjectService } from './project.service';
 
@@ -50,7 +50,6 @@ export class ProjectController {
       const response = await this.service.createProject(name, userInfo, accessToken);
       return response;
     } catch (error) {
-
       console.log(error);
       console.log('프로젝트 생성중 에러발생');
       return error;
@@ -65,11 +64,23 @@ export class ProjectController {
       const avatar: object = res;
       const response = await this.service.createAvatar(avatar);
       return response;
-
     } catch (error) {
-
       console.log(error);
       console.log('프로젝트 아바타 모델 생성중 에러발생');
+      return error;
+    }
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Delete()
+  async deleteProject(@Request() req: any,) {
+    try {
+      const { id } = req.body;
+      const response = await this.service.deleteProject(id);
+      return response;
+    } catch (error) {
+      console.log(error);
+      console.log('프로젝트 삭제중 에러발생');
       return error;
     }
   }

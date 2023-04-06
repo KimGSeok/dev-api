@@ -5,22 +5,28 @@
  */
 export const getProjectListQuery = `
   SELECT
-    id,
-    uuid,
-    team_id,
-    name,
-    status,
-    thumbnail_url,
-    DATE_FORMAT(created_at, '%Y-%m-%d %H:%i:%s') AS created_at,
-    DATE_FORMAT(updated_at, '%Y-%m-%d %H:%i:%s') AS updated_at
+    P.id,
+    P.uuid,
+    P.team_id,
+    P.name,
+    P.status,
+    P.thumbnail_url,
+    PIF.audio_download_url,
+    PIF.video_download_url,
+    DATE_FORMAT(P.created_at, '%Y-%m-%d %H:%i:%s') AS created_at,
+    DATE_FORMAT(PIF.updated_at, '%Y-%m-%d %H:%i:%s') AS updated_at
   FROM
-    project
+    project AS P
+  LEFT JOIN
+    project_information AS PIF
+  ON
+    P.id = PIF.project_id
   WHERE
-    user_id = ?
+    P.user_id = ?
   AND
-    deleted_at IS NULL
+    P.deleted_at IS NULL
   ORDER BY
-    id DESC;
+    P.id DESC;
 `;
 
 /**
@@ -231,4 +237,21 @@ export const createProjectScriptQuery = `
       NOW(),
       NOW()
     )
+`
+
+/**
+ * Description: 프로젝트 삭제
+ * Date: 2023.04.06
+ * Author: Kim Gyeong Seok
+ */
+export const deleteProjectQuery = `
+  UPDATE
+    project
+  SET
+    updated_at = NOW(),
+    deleted_at = NOW()
+  WHERE
+    id = ?
+  AND
+    deleted_at IS NULL
 `
