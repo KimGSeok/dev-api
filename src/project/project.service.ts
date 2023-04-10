@@ -135,7 +135,7 @@ export class ProjectService {
         return new ServiceUnavailableException();
       }
 
-      const downloadUrl = contentType === 'audio' ? `http://fury.aitricsdev.com:40067${response.data.audio_path}` : `http://fury.aitricsdev.com:40064${response.data.video_path}`
+      const downloadUrl = contentType === 'audio' ? `http://groot.aitricsdev.com:40067${response.data.audio_path}` : `http://groot.aitricsdev.com:40064${response.data.video_path}`
       const rawData = await fetch(downloadUrl);
 
       // check Detail Info

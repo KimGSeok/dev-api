@@ -177,3 +177,19 @@ export const createVirtualHumanRecordResourceQuery = `
       NOW()
     )
 `
+
+/**
+ * Description: 가상인간 삭제
+ * Date: 2023.04.10
+ * Author: Kim Gyeong Seok
+ */
+export const deleteVirtualHumanQuery = `
+  UPDATE
+    virtual_human
+  SET
+    deleted_at = NOW()
+  WHERE
+    id = ?
+  AND
+    deleted_at IS NULL;
+`

@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Request, UseInterceptors, UseGuards, UploadedFiles } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Request, UseInterceptors, UseGuards, UploadedFiles, Delete } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { multerOptions } from 'src/lib/multer';
@@ -25,6 +25,7 @@ export class VirtualHumanController {
     }
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get('/getScripts')
   async getVoiceRecordScript() {
     try {
@@ -38,6 +39,7 @@ export class VirtualHumanController {
     }
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get('/:id')
   async getVirtualHumanDetailInfo(@Param('id') id: string) {
     try {
@@ -51,6 +53,7 @@ export class VirtualHumanController {
     }
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get('/resource/:params')
   async getVirtualHumanRecordResource(@Param('params') params: string) {
     try {
@@ -87,6 +90,20 @@ export class VirtualHumanController {
 
       console.log('가상인간 스크립트 생성중 에러발생');
       console.log(error);
+      return error;
+    }
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Delete()
+  async deleteVirtualHuman(@Request() req: any){
+    try{
+      const { id } = req.body;
+      const response = await this.service.deleteVirtualHuman(id);
+      return response;
+    }catch(error){
+      console.log(error);
+      console.log('가상인간 삭제중 에러발생');
       return error;
     }
   }

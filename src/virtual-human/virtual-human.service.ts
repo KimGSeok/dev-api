@@ -7,7 +7,8 @@ import {
   getRecordScriptQuery,
   createVirtualHumanQuery,
   createVirtualHumanRecordResourceQuery,
-  getVirtualHumanResourceListQuery
+  getVirtualHumanResourceListQuery,
+  deleteVirtualHumanQuery
 } from './virtual-human.query';
 
 // Environment
@@ -154,9 +155,29 @@ export class VirtualHumanService {
 
       return;
     } catch (error) {
-
       (await this.connection.connectionPool.getConnection()).rollback();
       console.log('가상인간 스크립트 생성 로직 에러발생');
+      console.error(error);
+      return error;
+    }
+  }
+
+  async deleteVirtualHuman(id: string){
+    try{
+
+      (await this.connection.connectionPool.getConnection()).beginTransaction();
+
+      // Query
+      const [response, field] = await this.connection.connectionPool.query(deleteVirtualHumanQuery, [id]);
+
+      (await this.connection.connectionPool.getConnection()).commit();
+
+      (await this.connection.connectionPool.getConnection()).destroy();
+
+      return response;
+    }catch(error){
+      (await this.connection.connectionPool.getConnection()).rollback();
+      console.log('가상인간 삭제 로직 에러발생');
       console.error(error);
       return error;
     }
