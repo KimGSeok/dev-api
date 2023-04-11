@@ -88,9 +88,9 @@ export const getProjectScriptInfoQuery = `
 	SELECT
 		id,
 		project_id,
-		script,
+		script as text,
 		speed,
-		wait_time
+		wait_time as pauseSecond
 	FROM
 		project_script
 	WHERE
