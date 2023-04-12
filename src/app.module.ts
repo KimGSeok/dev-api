@@ -11,9 +11,9 @@ import { ProjectController } from './project/project.controller';
 import { FileController } from './file/file.controller';
 import { FileService } from './file/file.service';
 import { ProjectService } from './project/project.service';
-import { UserController } from './user/user.controller';
+import { UsersController } from './users/users.controller';
 import { AuthController } from './auth/auth.controller';
-import { UserService } from './user/user.service';
+import { UsersService } from './users/users.service';
 import { AuthService } from './auth/auth.service';
 import { AuthModule } from './auth/auth.module';
 import { Request, Response, NextFunction } from 'express';
@@ -50,7 +50,7 @@ export class LoggerMiddleWare implements NestMiddleware {
     VirtualHumanController,
     ProjectController,
     FileController,
-    UserController,
+    UsersController,
     AuthController,
   ],
   providers: [
@@ -59,7 +59,7 @@ export class LoggerMiddleWare implements NestMiddleware {
     VirtualHumanService,
     ProjectService,
     FileService,
-    UserService,
+    UsersService,
     AuthService,
   ], // Model
 })

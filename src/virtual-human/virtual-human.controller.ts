@@ -11,14 +11,13 @@ export class VirtualHumanController {
 
   @UseGuards(JwtAuthGuard)
   @Get()
-  async getVirtualHumanList(@Request() req: any){
-    try{
+  async getVirtualHumanList(@Request() req: any) {
+    try {
 
-      // Parameter
       const userInfo = req.user;
       const result = await this.service.getVirtualHumanList(userInfo);
       return result;
-    }catch(error){
+    } catch (error) {
       console.log('가상인간 목록 조회중 에러발생');
       console.error(error);
       return error;
@@ -61,7 +60,7 @@ export class VirtualHumanController {
       // TODO
 
       const id = params.split('&')[0];
-      const uuid = params.split('&')[1].replace('uuid=','');
+      const uuid = params.split('&')[1].replace('uuid=', '');
       const result = await this.service.getVirtualHumanResourceList(id, uuid);
       return result;
     } catch (error) {
@@ -96,12 +95,12 @@ export class VirtualHumanController {
 
   @UseGuards(JwtAuthGuard)
   @Delete()
-  async deleteVirtualHuman(@Request() req: any){
-    try{
+  async deleteVirtualHuman(@Request() req: any) {
+    try {
       const { id } = req.body;
       const response = await this.service.deleteVirtualHuman(id);
       return response;
-    }catch(error){
+    } catch (error) {
       console.log(error);
       console.log('가상인간 삭제중 에러발생');
       return error;

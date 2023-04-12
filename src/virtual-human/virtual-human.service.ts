@@ -13,8 +13,8 @@ import {
 
 // Environment
 let url: string = process.env.NODE_ENV === 'development' ? 'http://localhost:30001/' : 'https://api.cidev.kr/';
-interface KeyValueProps{
-  [key:string]: string
+interface KeyValueProps {
+  [key: string]: string
 }
 
 @Injectable()
@@ -25,7 +25,7 @@ export class VirtualHumanService {
     private readonly httpService: HttpService
   ) { }
 
-  async getVirtualHumanList(userInfo: KeyValueProps){
+  async getVirtualHumanList(userInfo: KeyValueProps) {
     try {
 
       // Query
@@ -38,7 +38,7 @@ export class VirtualHumanService {
     }
   }
 
-  async getVirtualHumanDetailInfo(id: string){
+  async getVirtualHumanDetailInfo(id: string) {
     try {
 
       // TODO 조건주고 위에 목록 불러오기랑 합치기
@@ -66,7 +66,7 @@ export class VirtualHumanService {
     }
   }
 
-  async getVirtualHumanResourceList(id: string, uuid: string){
+  async getVirtualHumanResourceList(id: string, uuid: string) {
     try {
 
       // TODO uuid remove
@@ -111,16 +111,16 @@ export class VirtualHumanService {
 
       const body =
         avatarType === 'voice' ?
-        {
-          "urls": urlArr,
-          "scripts": scriptArr,
-          "audio_twin_version": virtualHumanId
-        } : 
-        {
-          "video_twin_version": virtualHumanId,
-          "url": urlArr[0]
-        };
-      
+          {
+            "urls": urlArr,
+            "scripts": scriptArr,
+            "audio_twin_version": virtualHumanId
+          } :
+          {
+            "video_twin_version": virtualHumanId,
+            "url": urlArr[0]
+          };
+
       // Virtual_human Table Create Query
       const [virtualHumanResponse]: any = await this.connection.connectionPool.query(createVirtualHumanQuery, [
         virtualHumanId,
@@ -148,7 +148,7 @@ export class VirtualHumanService {
       (await this.connection.connectionPool.getConnection()).commit();
 
       (await this.connection.connectionPool.getConnection()).destroy();
-      
+
       console.log('----------------------- 가상인간 생성 결과 ---------------------------');
 
       this.httpService.post(FAST_API_URL, body, options).toPromise();
@@ -162,8 +162,8 @@ export class VirtualHumanService {
     }
   }
 
-  async deleteVirtualHuman(id: string){
-    try{
+  async deleteVirtualHuman(id: string) {
+    try {
 
       (await this.connection.connectionPool.getConnection()).beginTransaction();
 
@@ -175,7 +175,7 @@ export class VirtualHumanService {
       (await this.connection.connectionPool.getConnection()).destroy();
 
       return response;
-    }catch(error){
+    } catch (error) {
       (await this.connection.connectionPool.getConnection()).rollback();
       console.log('가상인간 삭제 로직 에러발생');
       console.error(error);
