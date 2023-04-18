@@ -7,11 +7,14 @@ let dbconnection = mysql.createPool({
   database: process.env.DB_DATABASE,
 })
 
-const query = (sqlString: string, values: any) => {
+const query = (sqlQuery: string, values: any) => {
   if(!values) values = [];
 
+  console.log(sqlQuery);
+  console.log(values);
+
   return new Promise((resolve: any, reject: any) => {
-    dbconnection.query(sqlString, values, (err: any, result: any) => {
+    dbconnection.query(sqlQuery, values, (err: any, result: any) => {
       if(err){
         reject(err);
         return;
@@ -21,18 +24,4 @@ const query = (sqlString: string, values: any) => {
   });
 }
 
-const queryOne = (sqlString: string, values: any) =>{
-  if(!values) values = [];
-
-  return new Promise((resolve, reject) => {
-    dbconnection.query(sqlString, values, (error, result) => {
-      if(error){
-        reject(error);
-        return;
-      }
-      resolve(result[0]);
-    })
-  })
-}
-
-export { dbconnection, query, queryOne }
+export { dbconnection, query }

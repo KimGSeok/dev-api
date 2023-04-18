@@ -17,6 +17,8 @@ export const getOrganizatioMemberCountQuery = `
     UR.organization_id = ORG.id
   WHERE
     ORG.deleted_at IS NULL
+  AND
+    UR.deleted_at IS NULL
   GROUP BY
     ORG.id;
 `;
