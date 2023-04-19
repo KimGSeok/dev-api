@@ -11,6 +11,7 @@ interface UrlProps {
 
 @Injectable()
 export class FileService {
+
   downloadFile(res: Response, url: UrlProps) {
 
     // Parameter
@@ -23,5 +24,18 @@ export class FileService {
     );
     stream.pipe(res);
     return;
+  }
+
+  async getFileBuffer(url: string) {
+    try {
+      const rawData = await fetch(url);
+      const blob = await rawData.blob();
+
+
+    } catch (error) {
+      console.log('파일 버퍼 변환중 로직 에러발생');
+      console.error(error);
+      return error;
+    }
   }
 }

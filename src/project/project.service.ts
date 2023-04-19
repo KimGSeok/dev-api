@@ -139,7 +139,7 @@ export class ProjectService {
       const rawData = await fetch(downloadUrl);
 
       // check Detail Info
-      const [isCountDetailInfo, field] = await this.connection.connectionPool.query(isCheckProjectDetailQuery, [projectId]);
+      const [isCountDetailInfo,] = await this.connection.connectionPool.query(isCheckProjectDetailQuery, [projectId]);
 
       if (isCountDetailInfo[0].count > 0) {
 

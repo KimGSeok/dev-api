@@ -74,14 +74,14 @@ export class UsersService {
    * Date: 2023.04.17
    * Author: Kim Gyeong Seok
    */
-  async createUser(userInfo: KeyValueProps, data: KeyValueProps){
-    try{
+  async createUser(userInfo: KeyValueProps, data: KeyValueProps) {
+    try {
 
       const [response,] = await this.connection.connectionPool.query(checkUserQuery, [data.id]);
 
       if (response[0].cnt > 0)
         throw new ConflictException;
-      else{
+      else {
 
         const password = await bcrypt.hash(data.password, 10);
 
@@ -90,7 +90,7 @@ export class UsersService {
 
         return user;
       }
-    }catch(error){
+    } catch (error) {
       console.log('유저 생성 로직 에러발생');
       console.log(error);
       return error;
@@ -102,16 +102,16 @@ export class UsersService {
    * Date: 2023.04.17
    * Author: Kim Gyeong Seok
    */
-  async modifyUserInfo(userInfo: KeyValueProps, data: KeyValueProps){
-    try{
+  async modifyUserInfo(userInfo: KeyValueProps, data: KeyValueProps) {
+    try {
 
       const password = await bcrypt.hash(data.password, 10);
 
       const { query, params } = modifyUserQuery(password, data);
-      const [ userDetailInfo ] = await this.connection.connectionPool.query(query, params);
+      const [userDetailInfo] = await this.connection.connectionPool.query(query, params);
 
       return userDetailInfo;
-    }catch(error){
+    } catch (error) {
       console.log('유저 정부 수정중 로직 에러발생');
       console.log(error);
       return error;
@@ -123,13 +123,13 @@ export class UsersService {
    * Date: 2023.04.17
    * Author: Kim Gyeong Seok
    */
-  async deleteUserInfo(data: KeyValueProps){
-    try{
+  async deleteUserInfo(data: KeyValueProps) {
+    try {
 
       const { query, params } = deleteUserQuery(data.id);
-      const [ response ] = await this.connection.connectionPool.query(query, params);
+      const [response] = await this.connection.connectionPool.query(query, params);
       return response;
-    }catch(error){
+    } catch (error) {
       console.log('유저 정부 수정중 로직 에러발생');
       console.log(error);
       return error;
