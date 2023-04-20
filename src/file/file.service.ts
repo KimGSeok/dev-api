@@ -28,10 +28,14 @@ export class FileService {
 
   async getFileBuffer(url: string) {
     try {
+
       const rawData = await fetch(url);
       const blob = await rawData.blob();
 
+      const type = blob.type;
+      const arrayBuffer = Object.values(new Uint8Array(await blob.arrayBuffer()));
 
+      return { type, arrayBuffer };
     } catch (error) {
       console.log('파일 버퍼 변환중 로직 에러발생');
       console.error(error);

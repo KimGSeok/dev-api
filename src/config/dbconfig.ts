@@ -10,9 +10,6 @@ let dbconnection = mysql.createPool({
 const query = (sqlQuery: string, values: any) => {
   if(!values) values = [];
 
-  console.log(sqlQuery);
-  console.log(values);
-
   return new Promise((resolve: any, reject: any) => {
     dbconnection.query(sqlQuery, values, (err: any, result: any) => {
       if(err){
