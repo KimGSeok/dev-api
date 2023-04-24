@@ -35,7 +35,7 @@ export class ProjectService {
     try {
 
       // Query
-      const [response, field] = await this.connection.connectionPool.query(getProjectListQuery, [userInfo.id]);
+      const [response,] = await this.connection.connectionPool.query(getProjectListQuery, [userInfo.id]);
       return response;
     } catch (error) {
       console.error(error);
@@ -74,7 +74,7 @@ export class ProjectService {
     try {
 
       // Query
-      const [response, field] = await this.connection.connectionPool.query(createProjectQuery, [userInfo.id, name]);
+      const [response,] = await this.connection.connectionPool.query(createProjectQuery, [userInfo.id, name]);
       return response;
     } catch (error) {
       console.error(error);
@@ -139,8 +139,6 @@ export class ProjectService {
       // check Detail Info
       const [isCountDetailInfo,] = await this.connection.connectionPool.query(isCheckProjectDetailQuery, [projectId]);
 
-      console.log(isCountDetailInfo);
-
       if (isCountDetailInfo[0].count > 0) {
 
         // 기존 상세정보가 존재하면 Update
@@ -166,8 +164,6 @@ export class ProjectService {
 
       // Delete All Script
       await this.connection.connectionPool.query(deleteProjectScriptQuery, [projectId]);
-
-      console.log(scriptList);
 
       // Insert Script
       for (const el of scriptList) {
